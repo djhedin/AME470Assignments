@@ -42,3 +42,6 @@ app.use(methodOverride());
 app.use(bodyParser());
 app.use(express.static(__dirname + '/public'));
 app.use(errorHandler());
+
+console.log("Listening on port " + port.toString());
+app.listen(port);
