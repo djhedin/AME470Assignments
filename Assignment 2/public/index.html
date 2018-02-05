@@ -6,7 +6,7 @@
 		var calc = function() {
 			var inputA = $("#inpA").val();
 			var inputB = $("#inpB").val();
-			var operator = $("op").val();
+			var operator = $("#op").val();
 			var url = "./" + operator + "?a=" + inputA + "&b=" + inputB;
 
 			loadFile(url, function(data) {
