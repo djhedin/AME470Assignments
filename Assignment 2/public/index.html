@@ -4,9 +4,15 @@
 	<script src='jquery-3.3.1.min.js'></script>
 	<script>
 		var calc = function() {
-			val inputA = $("#inpA").val();
-			val inputB = $("#inpB").val();
-			val operator = $("op").val();
+			var inputA = $("#inpA").val();
+			var inputB = $("#inpB").val();
+			var operator = $("op").val();
+			var url = "./" + operator + "?a=" + inputA + "&b=" + inputB;
+
+			loadFile(url, function(data) {
+				$("#result").html(resData);
+			});
+			}
 		}
 	</script>
 </head>
