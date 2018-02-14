@@ -6,6 +6,14 @@
 function sendToServer(){
   // complete this function.
   //  you can use loadFile()
+  //use encode URI component to send eq.val to server
+  var url = "./eval?eq=" + encodeURIComponent($("#eq").val().trim());
+  console.log(url);
+  $("#eq").val('');
+  loadFile(url, function(resData) {
+    var markup = "<h4>" + resData + "</h4>";
+    $("#result").html(markup);
+  });
 }
   </script>
 
