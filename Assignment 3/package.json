@@ -1,10 +1,18 @@
 {
   "name": "assignment_3",
   "version": "1.0.0",
-  "description": "Third Assignment",
+  "description": "The third assignment",
   "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "errorhandler": "^1.5.0",
+    "express": "^4.16.2",
+    "method-override": "^2.3.10"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "Devyn J Hedin",
   "license": "ISC"
