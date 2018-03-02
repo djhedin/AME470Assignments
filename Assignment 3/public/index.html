@@ -5,25 +5,42 @@
   <style>
     #rssBox{
       float:left;
-      width: 250px;
+      width: 225px;
       min-height: 100%;
       background: gray;
-    } 
+    }
+    #rssBox button{
+      width:225px;
+    }
     #theDetails{
       float:right;
-      width: calc(100% - 250px);
+      float:left;
+      width: calc(100% - 350px);
       min-height: 100%;
       background: lightgray;
+      position:fixed;
+      left:250px;
     }
+		#theDetails h4{
+			padding-left:15px;
+		}
+    #theDetails p{
+      padding-left:15px;
+      padding-right:15px;
+    }
+		#theDetails h4{
+			font-family: Tahoma, Geneva, sans-serif;
+			font-style: normal;
+			font-size: 14px;
+		}
   </style>
   <script>
-  function getDataFromServer(){
-    //var url = "./eval?eq=34-4*45";
-    var url = "https://rss.itunes.apple.com/api/v1/us/apple-music/hot-tracks/all/10/explicit.json";
-    loadFile(url, function(resData){
-      $("#result").val(resData);
-    });
-  }
+  // function getDataFromServer(){
+  //   var url = "https://rss.itunes.apple.com/api/v1/us/apple-music/hot-tracks/all/10/explicit.json";
+  //   loadFile(url, function(resData){
+  //     $("#result").val(resData);
+  //   });
+  // }
 
   var currRSSData = null;
   function changeRSSSrc()
@@ -32,7 +49,6 @@
     var url = "./getFeedData?url=" + feedURL;
     loadFile(url, function(resData){
       currRSSData = JSON.parse(resData).feed.results;
-      //var markup = resData;
       var markup = "";
       for(var i = 0; i < currRSSData.length; i++){
         var entry = currRSSData[i];
@@ -48,8 +64,75 @@
   function itemSelected(n)
   {
     var data = currRSSData[n];
-    var markup = JSON.stringify(data);
+    var markup = JSON.stringify(data); //Used for troubleshooting
+
+    var artistName = (currRSSData[n].artistName) ? "<a href = " + currRSSData[n].artistUrl + " target=\"_blank\">" + currRSSData[n].artistName + "</a>" : "";
+    var name = (currRSSData[n].name) ? "<a href = " + currRSSData[n].url + " target=\"_blank\">" + currRSSData[n].name + "</a>" : "";
+    var collectionName = (currRSSData[n].collectionName) ? currRSSData[n].collectionName : "";
+    var releaseDate = (currRSSData[n].releaseDate) ? "<h4>Published: " + currRSSData[n].releaseDate + "</h4>" : "";
+    var copyright = (currRSSData[n].copyright) ? "<h4>" + currRSSData[n].copyright + "</h4>" : "";
+
+    var genre = (currRSSData[n].genres) ? function() {
+      if (currRSSData[n].genres[1]) {
+        var tmp = currRSSData[n].genres[0]
+        currRSSData[n].genres[0] = currRSSData[n].genres[1];
+        currRSSData[n].genres[1] = tmp;
+      }
+      var genre = "<h4>" + currRSSData[n].genres[0].name;
+      for (var i = 1; i < currRSSData[n].genres.length; i++) {
+        genre += " | " + currRSSData[n].genres[i].name;
+      }
+      return genre + "</h4>";
+    } : "";
+
+    switch(currRSSData[n].kind) { //Switch the details displayed based on the different kinds of RSS feeds
+      case "song":                //Feeds must come from https://rss.itunes.apple.com/en-us
+      case "musicVideo":
+        artistName = "<h4>Artists: " + artistName + "</h4>";
+        name = "<h4>Track: " + name + "</h4>";
+        collectionName = "<h4>Album: " + collectionName + "</h4>";
+        releaseDate = "<h4>Released: " + releaseDate + "</h4>";
+        break;
+      case "iosSoftware":
+      case "Application":
+        artistName = "<h4>Developer: " + artistName + "</h4>";
+        name = "<h4>App Name: " + name + "</h4>";
+        break;
+      case "book":
+      case "epubBook":
+        artistName = "<h4>Author: " + artistName + "</h4>";
+        name = "<h4>Title: " + name + "</h4>";
+        break;
+      case "tvEpisode":
+        artistName = "<h4>Series: " + artistName + "</h4>";
+        name = "<h4>Episode Title: " + name + "</h4>";
+        collectionName = "<h4>Season: " + collectionName + "</h4>";
+        releaseDate = "<h4>Released: " + releaseDate + "</h4>";
+        break;
+      case "movie":
+        artistName = "<h4>Director: " + artistName + "</h4>";
+        name = "<h4>Title: " + name + "</h4>";
+        releaseDate = "<h4>Released: " + releaseDate + "</h4>";
+        break;
+      case "course":
+        artistName = "<h4>Author: " + artistName + "</h4>";
+        name = "<h4>Course Title: " + name + "</h4>";
+        break;
+      case "podcast":
+        artistName = "<h4>Host: " + artistName + "</h4>";
+        name = "<h4>Title: " + name + "</h4>";
+        break;
+      default:
+         var markup = "Failed to parse RSS feed";
+        break;
+    }
+    markup = artistName + releaseDate + name + genre() + copyright;
     $("#theDetails").html(markup);
+    if (currRSSData[n].genres[1]) {
+      var tmp = currRSSData[n].genres[0]
+      currRSSData[n].genres[0] = currRSSData[n].genres[1];
+      currRSSData[n].genres[1] = tmp;
+    }
   }
   </script>
 
@@ -58,7 +141,7 @@
 <body>
 <div id='rssBox'>
 	<h1> RSS Reader </h1>
-  <button onclick='changeRSSSrc()'> Edit </button>
+  <button onclick='changeRSSSrc()' id='edit'> Edit </button>
   <div id='theList'></div>
 </div>
 <div id='theDetails'></div>
