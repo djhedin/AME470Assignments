@@ -2,7 +2,7 @@
 <head>
   <script src='asyncReq.js'></script>
   <script src='jquery-3.3.1.min.js'></script>
-  <style>
+	<style>
     #rssBox{
       float:left;
       width: 225px;
@@ -12,9 +12,13 @@
     #rssBox button{
       width:225px;
     }
+		#theList button h1,h2{
+			padding: 0px;
+			margin: 0px;
+			text-align: left;
+		}
     #theDetails{
       float:right;
-      float:left;
       width: calc(100% - 350px);
       min-height: 50%;
       background: lightgray;
@@ -23,6 +27,7 @@
     }
 		#theDetails h4{
 			padding-left:15px;
+			//text-align: center;
 		}
     #theDetails p{
       padding-left:15px;
@@ -35,18 +40,16 @@
 		}
   </style>
   <script>
-  // function getDataFromServer(){
-  //   var url = "https://rss.itunes.apple.com/api/v1/us/apple-music/hot-tracks/all/10/explicit.json";
-  //   loadFile(url, function(resData){
-  //     $("#result").val(resData);
-  //   });
-  // }
 
   var currRSSData = null;
   function changeRSSSrc()
   {
     var feedURL = prompt("Enter your RSS feed URL:");
     var url = "./getFeedData?url=" + feedURL;
+		loadRSS(url);
+  }
+	
+	function loadRSS(url) {
     loadFile(url, function(resData){
       currRSSData = JSON.parse(resData).feed.results;
       var markup = "";
@@ -59,8 +62,8 @@
       }
       $("#theList").html(markup);
     });
-  }
-
+	}
+	
   function itemSelected(n)
   {
     var data = currRSSData[n];
@@ -135,7 +138,7 @@
     }
   }
   </script>
-
+<script>loadRSS("./getFeedData?url=" + window.location.hash.replace("#", ""));</script>
 </head>
 
 <body>
