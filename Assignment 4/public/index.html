@@ -71,6 +71,9 @@ button.active,
 		background: lightgray;
 		text-align:center;
 	}
+	#theImage {
+		padding-top: 20px;
+	}
 		</style>
 		<script>
 function renameClicked(n){
@@ -78,13 +81,13 @@ function renameClicked(n){
 	var id = currRSSFeedList[n].id;
 	var x = prompt("Rename Feed", currName);
 	console.log(x);
-	if(x){
+	/*if(x){
 		var url = "./renameImg?name=" + encodeURIComponent(x);
 		url += "&id=" + id;
 		loadFile(url, function(resData){
 			start();
 		});
-	}
+	}*/
 }
 
 function deleteClicked(n){
@@ -145,7 +148,7 @@ function imgSelected(n)
 	var id = currRSSFeedList[n].id;
 	var imgURL = currRSSFeedList[n].url;
 	//alert(imgURL);
-	$("#theDetails").html("<img src=\'" + imgURL + "\'></img>");
+	$("#theDetails").html("<img src=\'" + imgURL + "\' id=\'theImage\'></img>");
 }
 
 function start()
