@@ -14,9 +14,8 @@ var Client = require('node-rest-client').Client;
 
 var MS = require("mongoskin");
 var db = MS.db("mongodb://35.172.156.220:27017/ame470");
-
-app.use(require('connect').bodyParser());
 app.use(methodOverride());
+app.use(require('connect').bodyParser());
 app.use(bodyParser());
 app.use(express.static(__dirname + '/public'));
 app.use(errorHandler());
