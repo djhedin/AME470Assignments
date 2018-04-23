@@ -1,4 +1,8 @@
 var express = require("express");
+var fs = require('fs');
+var AWS = require('aws-sdk');
+AWS.config.loadFromPath('./credentials.json');
+var s3 = new AWS.S3();
 var app = express();
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
@@ -10,6 +14,14 @@ var Client = require('node-rest-client').Client;
 
 var MS = require("mongoskin");
 var db = MS.db("mongodb://35.172.156.220:27017/ame470");
+
+app.use(require('connect').bodyParser());
+app.use(methodOverride());
+app.use(bodyParser());
+app.use(express.static(__dirname + '/public'));
+app.use(errorHandler());
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 
 app.get("/", function (req, res) {
@@ -81,13 +93,6 @@ app.get("/deleteImg", function (req, res) {
      res.end("1");
   });
 });
-
-
-
-app.use(methodOverride());
-app.use(bodyParser());
-app.use(express.static(__dirname + '/public'));
-app.use(errorHandler());
 
 app.post('/uploadImage', function(req, res){
     var intname = req.body.fileInput;
