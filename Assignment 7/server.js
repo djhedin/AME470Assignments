@@ -1,26 +1,36 @@
-var express = require("express");
+/////////////////
 var fs = require('fs');
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./credentials.json');
 var s3 = new AWS.S3();
+
+var express = require("express");
 var app = express();
 var bodyParser = require('body-parser');
+
 var errorHandler = require('errorhandler');
 var methodOverride = require('method-override');
 var hostname = process.env.HOSTNAME || 'localhost';
 var port = 1234;
+app.use(methodOverride());
+//app.use(bodyParser());
+app.use(require('connect').bodyParser());
+
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+app.use(express.static(__dirname + '/public'));
+app.use(errorHandler());
+////////////////
 
 var Client = require('node-rest-client').Client;
 
 var MS = require("mongoskin");
 var db = MS.db("mongodb://35.172.156.220:27017/ame470");
-app.use(methodOverride());
-app.use(require('connect').bodyParser());
-app.use(bodyParser());
-app.use(express.static(__dirname + '/public'));
-app.use(errorHandler());
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
 
 
 app.get("/", function (req, res) {
