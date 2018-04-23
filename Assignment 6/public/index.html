@@ -186,8 +186,8 @@ var currSelection;
    // resetFilters();
     setFilters(n)
     // Instead of the above resetFilters(), init the filters stored by user and apply it!
-    document.getElementById("theDetails").style.backgroundImage = "url(" + imgURL + ")";
    
+	$("#theDetails").html("<img src=\'" + imgURL + "\' id=\'theImage\'></img>");
     $("#theImageList .item").removeClass("active");
     $("#theImageList .item:nth-of-type(" + (n+1) + ")").addClass("active");
   }
