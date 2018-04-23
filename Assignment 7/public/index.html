@@ -132,7 +132,7 @@ var fileUploaded = function()
       if (xhr.readyState != 4) { return; }
         // callback logic
        //document.getElementById("preview").src = "https://s3.amazonaws.com/ame470dhedin/" + fileInput;
-       addImgSrcFromBucket("https://s3.amazonaws.com/ame470dhedin/" + fileInput);
+       addImgSrcFromBucket("https://s3.amazonaws.com/ame470dhedin/" + fileInput + + "?t=" + new Date().getTime());
     };
     xhr.open("POST", "/uploadFile", true);
     xhr.send(fd);
