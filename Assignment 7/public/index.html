@@ -81,7 +81,7 @@ body{
       width: 250px;
       min-height: 100%;
       background: gray;
-    } 
+    }
     #theInspector{
       float:right;
       width: 250px;
@@ -90,13 +90,13 @@ body{
       top: 0px;
     position: absolute;
     right: 0px;
-    } 
+    }
     #rssBox{
       float:left;
       width: 250px;
       min-height: 100%;
       background: lightgray;
-    } 
+    }
     #theDetails{
       width: calc(100% - 500px);
       min-height: 100%;
@@ -175,6 +175,18 @@ body{
     })
   }
 
+  function addImgSrcToBucket(src)
+  {
+    var feedURL = src;
+    var url = "./addImg?url=" + feedURL;
+    url += "&date=" + new Date().getTime();
+    url += "&name=Untitled";
+    url += "&id=test" + new Date().getTime();
+    loadFile(url, function(resData){
+        start();
+    })
+  }
+
 var currSelection;
 
   function imgSelected(n)
@@ -186,7 +198,7 @@ var currSelection;
    // resetFilters();
     setFilters(n)
     // Instead of the above resetFilters(), init the filters stored by user and apply it!
-   
+
 	$("#theDetails").html("<img src=\'" + imgURL + "\' id=\'theImage\'></img>");
     $("#theImageList .item").removeClass("active");
     $("#theImageList .item:nth-of-type(" + (n+1) + ")").addClass("active");
@@ -214,7 +226,7 @@ var currSelection;
           }
           $("#theImageList").html(markup);
           imgSelected(0);
-        }     
+        }
         ac.hide();
     });
   }
@@ -268,7 +280,7 @@ var currSelection;
       document.getElementById("opacity").value = obj.opacity || "100";
       document.getElementById("saturate").value = obj.saturate || "100";
       document.getElementById("sepia").value = obj.sepia || "0";
-      applyFilter();  
+      applyFilter();
   }
 
   function resetFilters()
@@ -309,7 +321,7 @@ var currSelection;
       filter += " sepia(" + sepia + ") ";
 
       document.getElementById("theDetails").style.filter = filter;
-    
+
       currRSSFeedList[n].blur = parseInt(blur);
       currRSSFeedList[n].brightness = parseInt(brightness);
       currRSSFeedList[n].contrast = parseInt(contrast);
@@ -319,8 +331,8 @@ var currSelection;
       currRSSFeedList[n].opacity = parseInt(opacity);
       currRSSFeedList[n].saturate = parseInt(saturate);
       currRSSFeedList[n].sepia = parseInt(sepia);
-      
-      var url = "./updateImg?id=" + currRSSFeedList[n].id 
+
+      var url = "./updateImg?id=" + currRSSFeedList[n].id
         + "&blur=" + parseInt(blur)
         + "&brightness=" + parseInt(brightness)
         + "&contrast=" + parseInt(contrast)
@@ -334,6 +346,76 @@ var currSelection;
         loadFile(url, function(resData){
         });
   }
+
+////////////////////////////////////////////////////////////////////////////////
+
+var fileUploaded = function()
+{
+   var file = $('#theFileUploader').get(0);
+   var fileObj = $('#theFileUploader').get(0).files[0]
+   var filename = fileObj.name;
+   console.log(filename);
+   var ext = filename.split(".");
+   ext = ext[ext.length-1];
+   console.log(ext);
+
+   var fd = new FormData();
+   var fileInput = "s3Upload_" + new Date().getTime().toString() + "." + ext;
+   //fileInput = "s3Upload_1524503704613.jpeg";
+   fd.append('fileInput', fileInput);
+   fd.append('input', file.files[0]);
+   fd.append('date', (new Date()).toString());
+
+    //fd.append('data', data);
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(e) {
+      if (xhr.readyState != 4) { return; }
+        // callback logic
+       //document.getElementById("preview").src = "https://s3.amazonaws.com/ame470dhedin/" + fileInput;
+       addImgSrcToBucket("https://s3.amazonaws.com/ame470dhedin/" + fileInput);
+
+    };
+    xhr.open("POST", "/uploadFile", true);
+    xhr.send(fd);
+}
+
+function saveImageEdit(){
+  if(sessionStorage.getItem("isEdited") == "true"){
+     var fd = new FormData();
+     var fileInput = document.getElementById("preview").src.split("ame470dhedin/")[1];
+     fileInput = fileInput.split("?")[0];
+     fd.append('fileInput', fileInput);
+     fd.append('date', (new Date()).toString());
+     fd.append('data', sessionStorage.getItem("editedImage"));
+
+      //fd.append('data', data);
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function(e) {
+        cancelImageEdit();
+        if (xhr.readyState != 4) { return; }
+          // callback logic
+        document.getElementById("preview").src = "https://s3.amazonaws.com/ame4702018/" + fileInput + "?t=" + new Date().getTime();
+      };
+      xhr.open("POST", "/uploadImage", true);
+      xhr.send(fd);
+  }
+
+}
+
+function cancelImageEdit()
+{
+  document.getElementById("DRFrame").src = "";
+  document.getElementById("editWrapper").style.display = "none";
+}
+
+function editImage(){
+  var url = document.getElementById("preview").src;
+  document.getElementById("DRFrame").src = "./demo/index.html#" + url;
+  document.getElementById("editWrapper").style.display = "block";
+  sessionStorage.setItem("isEdited", "false");
+}
+////////////////////////////////////////////////////////////////////////////////
+
   </script>
 
 </head>
@@ -341,6 +423,7 @@ var currSelection;
 <div id='allImagesWrapper'>
 	<h1> Image Lib</h1>
   <button id='editButton' onclick='addImgSrc()'> Add</button>
+  <input type='file' id='theFileUploader' onchange='fileUploaded()'>
   <div id='theImageList'></div>
 </div>
 <div id='theDetails'></div>
