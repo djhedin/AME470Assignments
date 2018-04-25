@@ -6,108 +6,109 @@
   <script src='file.js'></script>
   <link rel="stylesheet" type="text/css" href="ac.css">
   <style>
-#theInspector input[type=range]{
-    width: 65%;
-    display: inline-block;
-}
-#theInspector label{
-    width: 30%;
-    display: inline-block;
-    text-align: right;
-}
-body{
-  margin: 0px;
-}
-#theImageList .item button h1{
-    margin-left: 105px;
-}
-.item button .thumb{
-      width: 100px;
-    height: 100px;
-    float: left;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    margin-right: 5px;
-}
-  .item.active,
-  button.active,
-  .item.active button{
-    background:gold;
+  #theInspector input[type=range]{
+      width: 65%;
+      display: inline-block;
   }
-  .item{
-    background:white;
+  #theInspector label{
+      width: 30%;
+      display: inline-block;
+      text-align: right;
   }
-  .item,
-  #theList button{
-      border: 0px;
-      padding: 0px;
-      min-width: 100%;
-      box-shadow: 0px 0px 1px;
-      border:none;
-  }
-  button{
-    border:none;
-  }
-  #theImageList button h1,
-  #theImageList button h2,
-  #theList button h1,
-  #theList button h2
-  {
-    padding: 0px;
+  body{
     margin: 0px;
-    font-size: 20px;
-    line-height: 20px;
-    margin-bottom: 5px;
-    text-align: left;
   }
-  #theList button h2
-  {
-    font-size: 15px;
+  #theImageList .item button h1{
+      margin-left: 105px;
   }
-
-  #theList button img{
+  .item button .thumb{
+        width: 100px;
       height: 100px;
-      width: 100px;
       float: left;
-      margin-right: 5px;
-  }
-    #editButton{
-      float: right;
-      margin-top: -50px;
-      margin-right: 5px;
-    }
-    #allImagesWrapper{
-      float:left;
-      width: 250px;
-      min-height: 100%;
-      background: gray;
-    }
-    #theInspector{
-      float:right;
-      width: 250px;
-      min-height: 100%;
-      background: white;
-      top: 0px;
-    position: absolute;
-    right: 0px;
-    }
-    #rssBox{
-      float:left;
-      width: 250px;
-      min-height: 100%;
-      background: lightgray;
-    }
-    #theDetails{
-      width: calc(100% - 500px);
-      min-height: 100%;
-      background: lightgray;
-      text-align:center;
+      background-size: contain;
       background-repeat: no-repeat;
       background-position: 50%;
-      background-size: contain;
-          margin-left: 250px;
+      margin-right: 5px;
+  }
+    .item.active,
+    button.active,
+    .item.active button{
+      background:gold;
     }
+    .item{
+      background:white;
+    }
+    .item,
+    #theList button{
+        border: 0px;
+        padding: 0px;
+        min-width: 100%;
+        box-shadow: 0px 0px 1px;
+        border:none;
+    }
+    button{
+      border:none;
+    }
+    #theImageList button h1,
+    #theImageList button h2,
+    #theList button h1,
+    #theList button h2
+    {
+      padding: 0px;
+      margin: 0px;
+      font-size: 20px;
+      line-height: 20px;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+    #theList button h2
+    {
+      font-size: 15px;
+    }
+
+    #theList button img{
+        height: 100px;
+        width: 100px;
+        float: left;
+        margin-right: 5px;
+    }
+      #editButton{
+        float: right;
+        margin-top: -50px;
+        margin-right: 5px;
+      }
+      #allImagesWrapper{
+        float:left;
+        width: 250px;
+        min-height: 100%;
+        background: gray;
+      }
+      #theInspector{
+        float:right;
+        width: 250px;
+        min-height: 100%;
+        background: white;
+        top: 0px;
+      position: absolute;
+      right: 0px;
+      }
+      #rssBox{
+        float:left;
+        width: 250px;
+        min-height: 100%;
+        background: lightgray;
+      }
+      #theDetails{
+        width: calc(100% - 500px);
+        min-height: 100%;
+        background: lightgray;
+        text-align:center;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: contain;
+            margin-left: 250px;
+      }
+
   </style>
   <script>
   function renameClicked(n){
@@ -200,7 +201,8 @@ var currSelection;
     setFilters(n)
     // Instead of the above resetFilters(), init the filters stored by user and apply it!
 
-	$("#theDetails").html("<img src=\'" + imgURL + "\' id=\'theImage\'></img>");
+    document.getElementById("theDetails").style.backgroundImage = "url(" + imgURL + ")";
+
     $("#theImageList .item").removeClass("active");
     $("#theImageList .item:nth-of-type(" + (n+1) + ")").addClass("active");
   }
