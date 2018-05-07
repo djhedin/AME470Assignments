@@ -57,13 +57,13 @@ button.active,
 		width: 250px;
 		min-height: 100%;
 		background: gray;
-	} 
+	}
 	#rssBox{
 		float:left;
 		width: 250px;
 		min-height: 100%;
 		background: lightgray;
-	} 
+	}
 	#theDetails{
 		float:right;
 		width: calc(100% - 250px);
@@ -81,13 +81,13 @@ function renameClicked(n){
 	var id = currRSSFeedList[n].id;
 	var x = prompt("Rename Feed", currName);
 	console.log(x);
-	/*if(x){
+	if(x){
 		var url = "./renameImg?name=" + encodeURIComponent(x);
 		url += "&id=" + id;
 		loadFile(url, function(resData){
 			start();
 		});
-	}*/
+	}
 }
 
 function deleteClicked(n){
@@ -172,7 +172,7 @@ function start()
 				markup += "</div>";
 			}
 			$("#theImageList").html(markup);
-		}     
+		}
 		ac.hide();
 	});
 }
